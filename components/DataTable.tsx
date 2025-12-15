@@ -1,15 +1,7 @@
 "use client"
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { Copy, Check } from "lucide-react"
+import { Copy, Check, ChevronRight } from "lucide-react"
 import { toast } from "sonner"
 import { SheetRow } from "@/hooks/useSheetData"
 import { cn } from "@/lib/utils"
@@ -24,7 +16,7 @@ export function DataTable({ data, loading }: DataTableProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const handleCopy = (id: string, text: string, e: React.MouseEvent) => {
-    e.stopPropagation(); // 행 클릭 이벤트 방지 (필요시)
+    e.stopPropagation();
     if (!text) return;
     
     navigator.clipboard.writeText(text);
@@ -38,9 +30,9 @@ export function DataTable({ data, loading }: DataTableProps) {
 
   if (loading) {
     return (
-      <div className="space-y-3">
+      <div className="space-y-4">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="w-full h-16 bg-muted/50 animate-pulse rounded-lg" />
+          <div key={i} className="w-full h-24 bg-muted/40 animate-pulse rounded-2xl border border-white/5" />
         ))}
       </div>
     );
@@ -48,66 +40,66 @@ export function DataTable({ data, loading }: DataTableProps) {
   
   if (data.length === 0) {
      return (
-      <div className="w-full py-20 flex flex-col items-center justify-center text-muted-foreground bg-muted/10 rounded-xl border border-dashed">
-        <p>검색 결과가 없습니다.</p>
+      <div className="w-full py-24 flex flex-col items-center justify-center text-muted-foreground bg-muted/5 rounded-3xl border border-dashed border-muted/30">
+        <p className="text-lg font-medium">검색 결과가 없습니다.</p>
+        <p className="text-sm opacity-60 mt-1">다른 키워드로 검색해보세요.</p>
       </div>
      );
   }
 
   return (
-    <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
-      <Table>
-        <TableHeader className="bg-muted/30">
-          <TableRow className="hover:bg-transparent">
-            <TableHead className="w-[25%] min-w-[150px] py-4 pl-6 font-bold text-foreground">제목</TableHead>
-            <TableHead className="py-4 font-bold text-foreground">내용</TableHead>
-            <TableHead className="w-[100px] text-right pr-6 font-bold text-foreground">작업</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.map((row) => (
-            <TableRow 
-              key={row.id} 
-              className="group transition-all hover:bg-muted/30 cursor-pointer"
-              onClick={(e) => handleCopy(row.id, row.content, e)}
-            >
-              <TableCell className="font-semibold align-top py-5 pl-6 text-foreground/90 leading-relaxed">
+    <div className="space-y-4">
+      {data.map((row) => (
+        <div 
+          key={row.id}
+          className="group relative bg-card hover:bg-muted/30 border border-border/50 hover:border-primary/20 rounded-2xl p-5 sm:p-6 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5 cursor-pointer overflow-hidden"
+          onClick={(e) => handleCopy(row.id, row.content, e)}
+        >
+          {/* Hover Glow Effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+          <div className="flex flex-col sm:flex-row gap-4 sm:items-start justify-between relative z-10">
+            <div className="space-y-3 flex-1 min-w-0">
+              <h3 className="text-lg font-bold text-foreground leading-snug group-hover:text-primary transition-colors duration-300">
                 {row.title}
-              </TableCell>
-              <TableCell className="align-top py-5 text-muted-foreground group-hover:text-foreground transition-colors leading-relaxed">
-                <div className="line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
-                  {row.content}
-                </div>
-              </TableCell>
-              <TableCell className="align-top py-5 pr-6 text-right">
-                <Button 
-                  variant={copiedId === row.id ? "default" : "secondary"}
-                  size="sm" 
-                  className={cn(
-                    "transition-all duration-200 shadow-sm",
-                    copiedId === row.id 
-                      ? "bg-green-600 hover:bg-green-700 text-white" 
-                      : "opacity-0 group-hover:opacity-100 bg-secondary hover:bg-secondary/80 text-secondary-foreground"
-                  )}
-                  onClick={(e) => handleCopy(row.id, row.content, e)}
-                >
-                  {copiedId === row.id ? (
-                    <>
-                      <Check className="h-3.5 w-3.5 mr-1.5" />
-                      <span className="text-xs">완료</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-3.5 w-3.5 mr-1.5" />
-                      <span className="text-xs">복사</span>
-                    </>
-                  )}
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+              </h3>
+              <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
+                {row.content}
+              </p>
+            </div>
+
+            <div className="flex items-center justify-between sm:justify-end gap-3 sm:w-auto mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-0 border-border/50">
+               <span className="text-xs font-medium text-primary/70 sm:hidden">
+                 탭하여 복사하기
+               </span>
+               
+               <Button 
+                variant={copiedId === row.id ? "default" : "outline"}
+                size="sm" 
+                className={cn(
+                  "shrink-0 transition-all duration-300 font-semibold rounded-xl h-10 px-5",
+                  copiedId === row.id 
+                    ? "bg-green-600 hover:bg-green-700 text-white border-transparent shadow-md shadow-green-500/20" 
+                    : "border-border hover:border-primary/50 hover:bg-primary/5 hover:text-primary text-muted-foreground"
+                )}
+                onClick={(e) => handleCopy(row.id, row.content, e)}
+              >
+                {copiedId === row.id ? (
+                  <>
+                    <Check className="h-4 w-4 mr-1.5" />
+                    완료
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-4 w-4 mr-1.5" />
+                    복사
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
