@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { Copy, Check, PlayCircle } from "lucide-react"
+import { Copy, Check } from "lucide-react"
 import { toast } from "sonner"
 import { SheetRow } from "@/hooks/useSheetData"
 import { cn } from "@/lib/utils"
@@ -59,7 +59,7 @@ export function DataTable({ data, loading }: DataTableProps) {
     <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
       <Table>
         <TableHeader className="bg-muted/30">
-          <TableRow className="hover:bg-transparent border-b-primary/10">
+          <TableRow className="hover:bg-transparent border-b">
             <TableHead className="w-[50px] text-center">#</TableHead>
             <TableHead className="w-[25%] min-w-[150px] py-4 font-bold text-foreground">제목</TableHead>
             <TableHead className="py-4 font-bold text-foreground">프롬프트 내용</TableHead>
@@ -70,32 +70,28 @@ export function DataTable({ data, loading }: DataTableProps) {
           {data.map((row, index) => (
             <TableRow 
               key={row.id} 
-              className="group transition-colors hover:bg-muted/40 cursor-pointer border-b-muted/50 last:border-0"
-              onClick={(e) => handleCopy(row.id, row.content, e)}
+              className="transition-colors hover:bg-muted/30 border-b last:border-0"
             >
-              <TableCell className="text-center font-medium text-muted-foreground/50 align-top py-5">
+              <TableCell className="text-center font-medium text-muted-foreground align-top py-5">
                 {index + 1}
               </TableCell>
-              <TableCell className="font-semibold align-top py-5 text-foreground/90 leading-relaxed">
-                <div className="flex items-start gap-2">
-                  <PlayCircle className="w-4 h-4 text-primary mt-1 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity" />
-                  <span>{row.title}</span>
-                </div>
+              <TableCell className="font-semibold align-top py-5 text-foreground leading-relaxed">
+                {row.title}
               </TableCell>
-              <TableCell className="align-top py-5 text-muted-foreground group-hover:text-foreground transition-colors leading-relaxed">
-                <div className="line-clamp-2 group-hover:line-clamp-none transition-all duration-300 font-mono text-sm bg-muted/30 p-2 rounded-md group-hover:bg-muted/50">
+              <TableCell className="align-top py-5 text-muted-foreground leading-relaxed">
+                <div className="line-clamp-2">
                   {row.content}
                 </div>
               </TableCell>
               <TableCell className="align-top py-5 pr-6 text-right">
                 <Button 
-                  variant={copiedId === row.id ? "default" : "secondary"}
+                  variant={copiedId === row.id ? "default" : "outline"}
                   size="sm" 
                   className={cn(
-                    "transition-all duration-200 h-8",
+                    "transition-all duration-200 h-8 min-w-[80px]",
                     copiedId === row.id 
                       ? "bg-primary hover:bg-primary/90 text-primary-foreground" 
-                      : "opacity-0 group-hover:opacity-100 bg-secondary hover:bg-secondary/80 text-secondary-foreground"
+                      : "border-border hover:border-primary hover:bg-primary/5 hover:text-primary"
                   )}
                   onClick={(e) => handleCopy(row.id, row.content, e)}
                 >
