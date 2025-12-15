@@ -5,8 +5,9 @@ import { useSheetData } from '@/hooks/useSheetData';
 import { DataTable } from '@/components/DataTable';
 import { Pagination } from '@/components/Pagination';
 import { Search } from '@/components/Search';
-import { AlertCircle, Youtube, Play, Menu, Bell, Video, User } from 'lucide-react';
+import { AlertCircle, Youtube, Play, Menu, Bell, Video, User, ExternalLink, ShoppingBag } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import Image from 'next/image';
 
 export default function Home() {
   const { data, loading, error } = useSheetData();
@@ -85,12 +86,52 @@ export default function Home() {
       </header>
 
       <div className="container mx-auto px-4 py-8 max-w-6xl">
+        
+        {/* Book Promo Banner */}
+        <div className="mb-10 bg-gradient-to-r from-zinc-50 to-zinc-100 dark:from-zinc-900 dark:to-zinc-900/50 rounded-2xl border p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-8 relative overflow-hidden shadow-sm">
+          {/* Background decoration */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+          
+          <div className="relative z-10 shrink-0 transform transition-transform hover:scale-105 duration-300">
+            <div className="relative w-[160px] h-[220px] sm:w-[180px] sm:h-[260px] shadow-2xl rounded-lg overflow-hidden border-2 border-white/20">
+              <Image 
+                src="/book-cover.jpg" 
+                alt="이게 되네? AI 쇼츠 만들기 미친 자동화 22제" 
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+          </div>
+          
+          <div className="flex-1 text-center sm:text-left space-y-4 z-10 max-w-xl">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
+              <ShoppingBag className="w-3.5 h-3.5" />
+              Best Seller
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+              이 사이트는 <span className="text-primary">도서의 독자</span>를 위해<br className="hidden sm:block" /> 만들어졌습니다
+            </h2>
+            <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
+              《이게 되네? AI 쇼츠 만들기 미친 자동화 22제》에 수록된 
+              모든 프롬프트를 복사 붙여넣기만으로 간편하게 사용해보세요.
+            </p>
+            <div className="pt-2 flex flex-wrap justify-center sm:justify-start gap-3">
+              <Button asChild size="lg" className="font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all">
+                <a href="#" target="_blank" rel="noopener noreferrer">
+                  도서 구매하기 <ExternalLink className="ml-2 w-4 h-4" />
+                </a>
+              </Button>
+            </div>
+          </div>
+        </div>
+
         <div className="mb-8 space-y-4 text-center sm:text-left">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-            이게 되네? <span className="text-primary">AI 쇼츠 만들기</span> 미친 자동화 22제
+            프롬프트 <span className="text-primary">전체 목록</span>
           </h1>
-          <p className="text-muted-foreground text-lg">
-            영상 제작 시간을 획기적으로 줄여줄 22가지 자동화 프롬프트 모음입니다.
+          <p className="text-muted-foreground">
+            원하는 자동화 작업을 검색하고 클릭 한 번으로 사용하세요.
           </p>
         </div>
 
@@ -122,6 +163,15 @@ export default function Home() {
             </div>
           )}
         </div>
+        
+        <footer className="mt-16 py-8 border-t text-center space-y-2">
+          <p className="text-sm text-muted-foreground">
+            © {new Date().getFullYear()} GDRB &amp; Golden Rabbit. All rights reserved.
+          </p>
+          <p className="text-xs text-muted-foreground/60">
+            본 사이트는 도서 구매자를 위한 보조 도구입니다.
+          </p>
+        </footer>
       </div>
     </main>
   );
