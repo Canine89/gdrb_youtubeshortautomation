@@ -145,13 +145,6 @@ export default function Home() {
 
           {/* Right Main Content */}
           <section className="lg:col-span-9 space-y-6">
-            <div className="flex flex-col gap-2">
-               <h1 className="text-2xl font-bold tracking-tight">쇼츠 완전 자동화 프롬프트</h1>
-               <p className="text-muted-foreground text-sm">
-                 총 <span className="font-bold text-foreground">{filteredData.length}</span>개의 스크립트
-               </p>
-            </div>
-
             {error && (
               <div className="p-4 rounded-lg border border-destructive/20 bg-destructive/5 text-destructive flex items-center gap-3">
                 <AlertCircle className="h-5 w-5" />
