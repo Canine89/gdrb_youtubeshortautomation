@@ -9,11 +9,11 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { Copy, Check } from "lucide-react"
+import { Copy, Check, ChevronDown, ChevronUp } from "lucide-react"
 import { toast } from "sonner"
 import { SheetRow } from "@/hooks/useSheetData"
 import { cn } from "@/lib/utils"
-import { useState } from "react"
+import { useState, Fragment } from "react"
 
 interface DataTableProps {
   data: SheetRow[];
@@ -22,6 +22,7 @@ interface DataTableProps {
 
 export function DataTable({ data, loading }: DataTableProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
 
   const handleCopy = (id: string, text: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -34,6 +35,18 @@ export function DataTable({ data, loading }: DataTableProps) {
     setTimeout(() => {
       setCopiedId(null);
     }, 2000);
+  };
+
+  const toggleExpand = (id: string) => {
+    setExpandedRows(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
   };
 
   if (loading) {
@@ -56,60 +69,89 @@ export function DataTable({ data, loading }: DataTableProps) {
   }
 
   return (
-    <div className="rounded-xl border bg-card shadow-sm overflow-x-auto">
-      <Table>
+    <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
+      <Table className="table-fixed w-full">
         <TableHeader className="bg-muted/30">
           <TableRow className="hover:bg-transparent border-b">
             <TableHead className="w-[50px] text-center">#</TableHead>
-            <TableHead className="w-[25%] min-w-[150px] py-4 font-bold text-foreground">제목</TableHead>
+            <TableHead className="w-[120px] py-4 font-bold text-foreground">제목</TableHead>
             <TableHead className="py-4 font-bold text-foreground">프롬프트 내용</TableHead>
-            <TableHead className="w-[120px] min-w-[120px] text-right pr-6 font-bold text-foreground">복사</TableHead>
+            <TableHead className="w-[80px] text-right pr-4 font-bold text-foreground">복사</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((row, index) => (
-            <TableRow 
-              key={row.id} 
-              className="transition-colors hover:bg-muted/30 border-b last:border-0"
-            >
-              <TableCell className="text-center font-medium text-muted-foreground align-top py-5">
-                {index + 1}
-              </TableCell>
-              <TableCell className="font-semibold align-top py-5 text-foreground leading-relaxed">
-                {row.title}
-              </TableCell>
-              <TableCell className="align-top py-5 text-muted-foreground leading-relaxed">
-                <div className="line-clamp-2">
-                  {row.content}
-                </div>
-              </TableCell>
-              <TableCell className="align-top py-5 pr-6 text-right whitespace-nowrap">
-                <Button 
-                  variant={copiedId === row.id ? "default" : "outline"}
-                  size="sm" 
+          {data.map((row, index) => {
+            const isExpanded = expandedRows.has(row.id);
+            
+            return (
+              <Fragment key={row.id}>
+                <TableRow 
                   className={cn(
-                    "transition-all duration-200 h-9 px-4 font-medium shadow-sm",
-                    copiedId === row.id 
-                      ? "bg-primary hover:bg-primary/90 text-white border-primary" 
-                      : "bg-white border-2 border-border hover:border-primary hover:bg-primary/5 hover:text-primary text-foreground"
+                    "transition-all duration-200 border-b last:border-0 cursor-pointer group",
+                    isExpanded ? "bg-muted/20" : "hover:bg-muted/30"
                   )}
-                  onClick={(e) => handleCopy(row.id, row.content, e)}
+                  onClick={() => toggleExpand(row.id)}
                 >
-                  {copiedId === row.id ? (
-                    <>
-                      <Check className="h-4 w-4 mr-1.5" />
-                      완료
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-4 w-4 mr-1.5" />
-                      복사
-                    </>
-                  )}
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
+                  <TableCell className="text-center font-medium text-muted-foreground align-top py-4">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell className="font-semibold align-top py-4 text-foreground leading-relaxed overflow-hidden">
+                    <div className="truncate" title={row.title}>
+                      {row.title}
+                    </div>
+                  </TableCell>
+                  <TableCell className="align-top py-4 text-muted-foreground leading-relaxed overflow-hidden">
+                    <div className="space-y-2">
+                      <div className={cn(
+                        "break-words transition-all duration-300",
+                        isExpanded ? "whitespace-pre-wrap" : "line-clamp-2"
+                      )}>
+                        {row.content}
+                      </div>
+                      <div className={cn(
+                        "flex items-center gap-1 text-xs transition-opacity duration-200",
+                        isExpanded 
+                          ? "text-[#FF0000]" 
+                          : "text-muted-foreground group-hover:text-[#FF0000]"
+                      )}>
+                        {isExpanded ? (
+                          <>
+                            <ChevronUp className="h-3 w-3" />
+                            <span>접기</span>
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="h-3 w-3" />
+                            <span>전체보기</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell className="align-top py-4 pr-4 text-right">
+                    <Button 
+                      variant={copiedId === row.id ? "default" : "outline"}
+                      size="icon"
+                      className={cn(
+                        "transition-all duration-200 h-8 w-8 shadow-md",
+                        copiedId === row.id 
+                          ? "bg-[#FF0000] hover:bg-[#CC0000] text-white border-[#FF0000]" 
+                          : "bg-[#f5f5f5] border-2 border-[#c0c0c0] hover:border-[#FF0000] hover:bg-[#fff0f0] text-[#333333] hover:text-[#FF0000]"
+                      )}
+                      onClick={(e) => handleCopy(row.id, row.content, e)}
+                      title="복사"
+                    >
+                      {copiedId === row.id ? (
+                        <Check className="h-4 w-4" />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              </Fragment>
+            );
+          })}
         </TableBody>
       </Table>
     </div>

@@ -61,7 +61,7 @@ export function Pagination({
             <SelectValue placeholder={itemsPerPage} />
           </SelectTrigger>
           <SelectContent side="top">
-            {[10, 20, 50, 100].map((pageSize) => (
+            {[7, 10, 15].map((pageSize) => (
               <SelectItem key={pageSize} value={`${pageSize}`}>
                 {pageSize}
               </SelectItem>

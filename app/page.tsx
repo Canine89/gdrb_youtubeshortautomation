@@ -13,7 +13,7 @@ export default function Home() {
   const { data, loading, error } = useSheetData();
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(7);
 
   // 검색 필터링
   const filteredData = useMemo(() => {
@@ -99,11 +99,43 @@ export default function Home() {
                 </p>
               </div>
 
-              <Button asChild className="w-full font-semibold bg-[#FF0000] hover:bg-[#CC0000] text-white shadow-sm">
-                <a href="#" target="_blank" rel="noopener noreferrer">
-                  도서 구매하기 <ExternalLink className="ml-2 w-3 h-3" />
-                </a>
-              </Button>
+              <div className="w-full space-y-3">
+                <p className="text-xs text-center text-amber-600 font-medium bg-amber-50 py-2 px-3 rounded-lg border border-amber-200">
+                  📚 판매 준비 중입니다
+                </p>
+                <div className="grid grid-cols-1 gap-2">
+                  {/* Yes24 - 빨간색 */}
+                  <Button 
+                    asChild 
+                    className="w-full font-bold bg-[#E6002D] hover:bg-[#cc0028] text-white shadow-sm opacity-60 cursor-not-allowed h-10"
+                    disabled
+                  >
+                    <a href="#" onClick={(e) => e.preventDefault()}>
+                      YES24
+                    </a>
+                  </Button>
+                  {/* 교보문고 - 하늘색/청록색 */}
+                  <Button 
+                    asChild 
+                    className="w-full font-bold bg-[#00AAC6] hover:bg-[#0099b3] text-white shadow-sm opacity-60 cursor-not-allowed h-10"
+                    disabled
+                  >
+                    <a href="#" onClick={(e) => e.preventDefault()}>
+                      교보문고
+                    </a>
+                  </Button>
+                  {/* 알라딘 - 보라색 */}
+                  <Button 
+                    asChild 
+                    className="w-full font-bold bg-[#6C3FA0] hover:bg-[#5c3590] text-white shadow-sm opacity-60 cursor-not-allowed h-10"
+                    disabled
+                  >
+                    <a href="#" onClick={(e) => e.preventDefault()}>
+                      알라딘
+                    </a>
+                  </Button>
+                </div>
+              </div>
             </div>
 
             <div className="hidden lg:block text-xs text-muted-foreground text-center">
