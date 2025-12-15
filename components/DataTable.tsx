@@ -56,14 +56,14 @@ export function DataTable({ data, loading }: DataTableProps) {
   }
 
   return (
-    <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
+    <div className="rounded-xl border bg-card shadow-sm overflow-x-auto">
       <Table>
         <TableHeader className="bg-muted/30">
           <TableRow className="hover:bg-transparent border-b">
             <TableHead className="w-[50px] text-center">#</TableHead>
             <TableHead className="w-[25%] min-w-[150px] py-4 font-bold text-foreground">제목</TableHead>
             <TableHead className="py-4 font-bold text-foreground">프롬프트 내용</TableHead>
-            <TableHead className="w-[100px] text-right pr-6 font-bold text-foreground">복사</TableHead>
+            <TableHead className="w-[120px] min-w-[120px] text-right pr-6 font-bold text-foreground">복사</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -83,26 +83,26 @@ export function DataTable({ data, loading }: DataTableProps) {
                   {row.content}
                 </div>
               </TableCell>
-              <TableCell className="align-top py-5 pr-6 text-right">
+              <TableCell className="align-top py-5 pr-6 text-right whitespace-nowrap">
                 <Button 
                   variant={copiedId === row.id ? "default" : "outline"}
                   size="sm" 
                   className={cn(
-                    "transition-all duration-200 h-8 min-w-[80px]",
+                    "transition-all duration-200 h-9 px-4 font-medium shadow-sm",
                     copiedId === row.id 
-                      ? "bg-primary hover:bg-primary/90 text-primary-foreground" 
-                      : "border-border hover:border-primary hover:bg-primary/5 hover:text-primary"
+                      ? "bg-primary hover:bg-primary/90 text-white border-primary" 
+                      : "bg-white border-2 border-border hover:border-primary hover:bg-primary/5 hover:text-primary text-foreground"
                   )}
                   onClick={(e) => handleCopy(row.id, row.content, e)}
                 >
                   {copiedId === row.id ? (
                     <>
-                      <Check className="h-3.5 w-3.5 mr-1" />
+                      <Check className="h-4 w-4 mr-1.5" />
                       완료
                     </>
                   ) : (
                     <>
-                      <Copy className="h-3.5 w-3.5 mr-1" />
+                      <Copy className="h-4 w-4 mr-1.5" />
                       복사
                     </>
                   )}
