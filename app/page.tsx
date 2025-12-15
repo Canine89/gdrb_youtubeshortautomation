@@ -5,7 +5,7 @@ import { useSheetData } from '@/hooks/useSheetData';
 import { DataTable } from '@/components/DataTable';
 import { Pagination } from '@/components/Pagination';
 import { Search } from '@/components/Search';
-import { AlertCircle, Play, Menu, BookOpen, ExternalLink, Video, Bell, User } from 'lucide-react';
+import { AlertCircle, Play, Menu, BookOpen, ExternalLink } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Image from 'next/image';
 
@@ -59,7 +59,7 @@ export default function Home() {
               <div className="flex items-center justify-center w-8 h-6 bg-[#FF0000] rounded-[4px] text-white">
                 <Play className="w-4 h-4 fill-white" />
               </div>
-              <span className="hidden sm:inline-block tracking-tight">Shorts Studio</span>
+              <span className="hidden sm:inline-block tracking-tight">유튜브 쇼츠 자동화 프롬프트</span>
             </div>
           </div>
 
@@ -69,18 +69,6 @@ export default function Home() {
               onChange={handleSearchChange} 
               placeholder="검색" 
             />
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-             <Button variant="ghost" size="icon" className="hidden sm:flex">
-              <Video className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="hidden sm:flex">
-              <Bell className="h-5 w-5" />
-            </Button>
-            <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center overflow-hidden cursor-pointer">
-               <User className="h-5 w-5 text-muted-foreground" />
-            </div>
           </div>
         </div>
       </header>
