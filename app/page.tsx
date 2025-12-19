@@ -101,36 +101,33 @@ export default function Home() {
 
               <div className="w-full space-y-3">
                 <p className="text-xs text-center text-amber-600 font-medium bg-amber-50 py-2 px-3 rounded-lg border border-amber-200">
-                  📚 판매 준비 중입니다
+                  📚 예약판매 중입니다
                 </p>
                 <div className="grid grid-cols-1 gap-2">
                   {/* Yes24 - 빨간색 */}
                   <Button 
                     asChild 
-                    className="w-full font-bold bg-[#E6002D] hover:bg-[#cc0028] text-white shadow-sm opacity-60 cursor-not-allowed h-10"
-                    disabled
+                    className="w-full font-bold bg-[#E6002D] hover:bg-[#cc0028] text-white shadow-sm h-10"
                   >
-                    <a href="#" onClick={(e) => e.preventDefault()}>
+                    <a href="https://bit.ly/4qAegPV" target="_blank" rel="noopener noreferrer">
                       YES24
                     </a>
                   </Button>
                   {/* 교보문고 - 하늘색/청록색 */}
                   <Button 
                     asChild 
-                    className="w-full font-bold bg-[#00AAC6] hover:bg-[#0099b3] text-white shadow-sm opacity-60 cursor-not-allowed h-10"
-                    disabled
+                    className="w-full font-bold bg-[#00AAC6] hover:bg-[#0099b3] text-white shadow-sm h-10"
                   >
-                    <a href="#" onClick={(e) => e.preventDefault()}>
+                    <a href="https://bit.ly/4qeWfWU" target="_blank" rel="noopener noreferrer">
                       교보문고
                     </a>
                   </Button>
                   {/* 알라딘 - 보라색 */}
                   <Button 
                     asChild 
-                    className="w-full font-bold bg-[#6C3FA0] hover:bg-[#5c3590] text-white shadow-sm opacity-60 cursor-not-allowed h-10"
-                    disabled
+                    className="w-full font-bold bg-[#6C3FA0] hover:bg-[#5c3590] text-white shadow-sm h-10"
                   >
-                    <a href="#" onClick={(e) => e.preventDefault()}>
+                    <a href="https://bit.ly/4jdEDbJ" target="_blank" rel="noopener noreferrer">
                       알라딘
                     </a>
                   </Button>
