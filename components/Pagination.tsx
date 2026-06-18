@@ -7,6 +7,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { cn } from "@/lib/utils"
 
 interface PaginationProps {
   currentPage: number;
@@ -16,32 +17,28 @@ interface PaginationProps {
   onItemsPerPageChange: (value: number) => void;
 }
 
-export function Pagination({ 
-  currentPage, 
-  totalPages, 
+export function Pagination({
+  currentPage,
+  totalPages,
   onPageChange,
   itemsPerPage,
   onItemsPerPageChange
 }: PaginationProps) {
-  
-  // 페이지 번호 생성 로직
+
   const getPageNumbers = () => {
-    // 페이지가 없으면 빈 배열 반환
     if (totalPages <= 0) return [];
-    
-    // 최대 5개 페이지만 표시 (현재 페이지 중심)
+
     let start = Math.max(1, currentPage - 2);
     let end = Math.min(totalPages, start + 4);
-    
-    // 시작점이 1보다 크고 끝점이 총 페이지보다 작으면 범위를 조정
+
     if (end - start < 4) {
       if (start === 1) {
-        end = Math.min(totalPages, start + 4); // 앞에서부터 5개
+        end = Math.min(totalPages, start + 4);
       } else if (end === totalPages) {
-        start = Math.max(1, end - 4); // 뒤에서부터 5개
+        start = Math.max(1, end - 4);
       }
     }
-    
+
     const pages = [];
     for (let i = start; i <= end; i++) {
       pages.push(i);
@@ -50,14 +47,14 @@ export function Pagination({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
-      <div className="flex items-center gap-2 text-sm text-muted-foreground order-2 sm:order-1">
-        <span>페이지당 표시:</span>
+    <div className="flex w-full flex-col items-center justify-between gap-4 py-2 sm:flex-row">
+      <div className="order-2 flex items-center gap-2 text-[13px] text-muted-foreground sm:order-1">
+        <span>페이지당 표시</span>
         <Select
           value={itemsPerPage.toString()}
           onValueChange={(value) => onItemsPerPageChange(Number(value))}
         >
-          <SelectTrigger className="h-8 w-[70px]">
+          <SelectTrigger className="h-8 w-[72px] rounded-full">
             <SelectValue placeholder={itemsPerPage} />
           </SelectTrigger>
           <SelectContent side="top">
@@ -72,18 +69,21 @@ export function Pagination({
 
       <div className="order-1 sm:order-2">
         <ShadcnPagination>
-          <PaginationContent>
+          <PaginationContent className="gap-1">
             <PaginationItem>
-              <PaginationPrevious 
-                href="#" 
+              <PaginationPrevious
+                href="#"
                 onClick={(e) => {
                   e.preventDefault();
                   if (currentPage > 1) onPageChange(currentPage - 1);
                 }}
-                className={currentPage <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                className={cn(
+                  "rounded-full [&>span]:hidden",
+                  currentPage <= 1 ? "pointer-events-none opacity-40" : "cursor-pointer"
+                )}
               />
             </PaginationItem>
-            
+
             {getPageNumbers().map((page) => (
               <PaginationItem key={page}>
                 <PaginationLink
@@ -93,7 +93,11 @@ export function Pagination({
                     e.preventDefault();
                     onPageChange(page);
                   }}
-                  className="cursor-pointer"
+                  className={cn(
+                    "cursor-pointer rounded-full",
+                    currentPage === page &&
+                      "border-transparent bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+                  )}
                 >
                   {page}
                 </PaginationLink>
@@ -101,13 +105,16 @@ export function Pagination({
             ))}
 
             <PaginationItem>
-              <PaginationNext 
-                href="#" 
+              <PaginationNext
+                href="#"
                 onClick={(e) => {
                   e.preventDefault();
                   if (currentPage < totalPages) onPageChange(currentPage + 1);
                 }}
-                className={currentPage >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                className={cn(
+                  "rounded-full [&>span]:hidden",
+                  currentPage >= totalPages ? "pointer-events-none opacity-40" : "cursor-pointer"
+                )}
               />
             </PaginationItem>
           </PaginationContent>
@@ -116,4 +123,3 @@ export function Pagination({
     </div>
   )
 }
-

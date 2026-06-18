@@ -1,6 +1,5 @@
 import { Input } from "@/components/ui/input"
-import { Search as SearchIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Search as SearchIcon, X } from "lucide-react"
 
 interface SearchProps {
   value: string;
@@ -10,30 +9,24 @@ interface SearchProps {
 
 export function Search({ value, onChange, placeholder = "검색" }: SearchProps) {
   return (
-    <div className="flex w-full max-w-[600px] items-center">
-      <div className="relative flex-1">
-        <Input
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="rounded-r-none border-r-0 pl-4 bg-background focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:border-primary/50 shadow-inner"
-          placeholder={placeholder}
-        />
-        {value && (
-          <button 
-            onClick={() => onChange("")}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-          >
-            ✕
-          </button>
-        )}
-      </div>
-      <Button 
-        variant="secondary" 
-        className="rounded-l-none border border-l-0 px-5 bg-secondary/50 hover:bg-secondary/80"
-        disabled
-      >
-        <SearchIcon className="h-5 w-5 text-muted-foreground" />
-      </Button>
+    <div className="relative w-full">
+      <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+      <Input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="h-10 rounded-full border-border bg-card pl-10 pr-10 text-[14px] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
+        placeholder={placeholder}
+      />
+      {value && (
+        <button
+          type="button"
+          onClick={() => onChange("")}
+          className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          aria-label="검색어 지우기"
+        >
+          <X className="h-3.5 w-3.5" />
+        </button>
+      )}
     </div>
   )
 }

@@ -6,73 +6,84 @@
 
 @theme {
   --font-sans: var(--font-noto-sans-kr), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif: var(--font-noto-serif-kr), Georgia, "Times New Roman", ui-serif, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
-  --radius: 0.5rem;
+  --radius: 0.75rem;
 }
 
 :root {
-  /* Youtube Light Theme Base */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  
-  /* Youtube Red */
-  --primary: oklch(0.627 0.265 29.234); /* #FF0000 */
-  --primary-foreground: oklch(1 0 0);
-  
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.145 0 0);
-  
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.37 0 0);
-  
-  --accent: oklch(0.96 0 0);
-  --accent-foreground: oklch(0.145 0 0);
-  
-  --destructive: oklch(0.627 0.265 29.234);
-  --destructive-foreground: oklch(1 0 0);
-  
-  --border: oklch(0.9 0 0);
-  --input: oklch(0.9 0 0);
-  --ring: oklch(0.627 0.265 29.234);
-  
-  --radius: 0.5rem;
+  /* Claude Parchment Theme — Light */
+  /* Page canvas: Parchment #f5f4ed */
+  --background: #f5f4ed;
+  /* Primary text: Anthropic Near Black #141413 */
+  --foreground: #141413;
+
+  /* Cards / elevated surfaces: Ivory #faf9f5 */
+  --card: #faf9f5;
+  --card-foreground: #141413;
+
+  --popover: #faf9f5;
+  --popover-foreground: #141413;
+
+  /* Primary CTA: Terracotta Brand #c96442 / text Ivory */
+  --primary: #c96442;
+  --primary-foreground: #faf9f5;
+
+  /* Secondary: Warm Sand #e8e6dc / text Charcoal Warm #4d4c48 */
+  --secondary: #e8e6dc;
+  --secondary-foreground: #4d4c48;
+
+  /* Muted: Border Cream bg + Olive Gray text */
+  --muted: #f0eee6;
+  --muted-foreground: #5e5d59;
+
+  /* Accent: same warm sand family */
+  --accent: #e8e6dc;
+  --accent-foreground: #4d4c48;
+
+  /* Destructive: Error Crimson */
+  --destructive: #b53333;
+  --destructive-foreground: #faf9f5;
+
+  /* Borders / inputs — warm cream */
+  --border: #f0eee6;
+  --input: #e8e6dc;
+  /* Focus ring — the only cool color in the system */
+  --ring: #3898ec;
+
+  --radius: 0.75rem;
 }
 
 .dark {
-  /* Youtube Dark Theme Base */
-  --background: oklch(0.145 0 0); /* #0F0F0F */
-  --foreground: oklch(0.98 0 0);
-  
-  --card: oklch(0.18 0 0); /* #272727 */
-  --card-foreground: oklch(0.98 0 0);
-  
-  --popover: oklch(0.18 0 0);
-  --popover-foreground: oklch(0.98 0 0);
-  
-  --primary: oklch(0.627 0.265 29.234);
-  --primary-foreground: oklch(1 0 0);
-  
-  --secondary: oklch(0.25 0 0);
-  --secondary-foreground: oklch(0.98 0 0);
-  
-  --muted: oklch(0.25 0 0);
-  --muted-foreground: oklch(0.7 0 0);
-  
-  --accent: oklch(0.25 0 0);
-  --accent-foreground: oklch(0.98 0 0);
-  
-  --destructive: oklch(0.627 0.265 29.234);
-  --destructive-foreground: oklch(1 0 0);
-  
-  --border: oklch(0.25 0 0);
-  --input: oklch(0.25 0 0);
-  --ring: oklch(0.627 0.265 29.234);
+  /* Claude Dark — Deep Dark canvas */
+  --background: #141413;
+  --foreground: #faf9f5;
+
+  --card: #30302e;
+  --card-foreground: #faf9f5;
+
+  --popover: #30302e;
+  --popover-foreground: #faf9f5;
+
+  --primary: #c96442;
+  --primary-foreground: #faf9f5;
+
+  --secondary: #30302e;
+  --secondary-foreground: #b0aea5;
+
+  --muted: #30302e;
+  --muted-foreground: #b0aea5;
+
+  --accent: #30302e;
+  --accent-foreground: #faf9f5;
+
+  --destructive: #b53333;
+  --destructive-foreground: #faf9f5;
+
+  --border: #30302e;
+  --input: #30302e;
+  --ring: #3898ec;
 }
 
 @layer base {
@@ -83,5 +94,12 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+  /* Serif applies to all native heading elements — pair with `font-serif` utility for explicit cases. */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: 0;
   }
 }

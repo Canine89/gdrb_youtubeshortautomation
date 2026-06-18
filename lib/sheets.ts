@@ -1,12 +1,31 @@
 import { google } from 'googleapis';
+import type { JWTInput } from 'google-auth-library';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
 // 환경 변수 또는 하드코딩된 ID 사용
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID || '1183q2XyX1QSM8Qs71hERWuCbBbyfBO2F8eN1QOhGSaI';
 
+type GoogleApiError = Error & {
+  code?: string | number;
+  response?: {
+    status?: number;
+    data?: {
+      error?: {
+        message?: string;
+      };
+    };
+  };
+};
+
+function normalizeError(error: unknown): GoogleApiError {
+  return error instanceof Error
+    ? error as GoogleApiError
+    : new Error(String(error)) as GoogleApiError;
+}
+
 export async function getGoogleSheetsClient() {
-  let serviceAccount;
+  let serviceAccount: JWTInput;
   
   // 환경 변수에서 서비스 계정 정보 가져오기
   const serviceAccountJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
@@ -14,8 +33,8 @@ export async function getGoogleSheetsClient() {
   if (serviceAccountJson) {
     // 환경 변수가 있으면 사용
     try {
-      serviceAccount = JSON.parse(serviceAccountJson);
-    } catch (error) {
+      serviceAccount = JSON.parse(serviceAccountJson) as JWTInput;
+    } catch {
       throw new Error('Failed to parse GOOGLE_SERVICE_ACCOUNT_JSON. Make sure it is valid JSON.');
     }
   } else {
@@ -23,12 +42,14 @@ export async function getGoogleSheetsClient() {
     try {
       const filePath = join(process.cwd(), 'service-account-file.json');
       const fileContent = readFileSync(filePath, 'utf-8');
-      serviceAccount = JSON.parse(fileContent);
-    } catch (error: any) {
-      if (error.code === 'ENOENT') {
+      serviceAccount = JSON.parse(fileContent) as JWTInput;
+    } catch (error: unknown) {
+      const fileError = normalizeError(error);
+
+      if (fileError.code === 'ENOENT') {
         throw new Error('Service account file not found. Please set GOOGLE_SERVICE_ACCOUNT_JSON environment variable or place service-account-file.json in the project root.');
       }
-      throw new Error(`Failed to read service account file: ${error.message}`);
+      throw new Error(`Failed to read service account file: ${fileError.message}`);
     }
   }
 
@@ -70,31 +91,32 @@ export async function getSheetData() {
       range: response.data.range || '',
       sheetName: actualSheetName,
     };
-  } catch (error: any) {
-    console.error('Error fetching sheet data:', error);
+  } catch (error: unknown) {
+    const sheetError = normalizeError(error);
+
+    console.error('Error fetching sheet data:', sheetError);
     console.error('Error details:', {
-      code: error.code,
-      message: error.message,
-      response: error.response?.data,
+      code: sheetError.code,
+      message: sheetError.message,
+      response: sheetError.response?.data,
     });
     
     // 더 자세한 에러 메시지 제공
-    if (error.code === 'ENOENT') {
+    if (sheetError.code === 'ENOENT') {
       throw new Error('Service account file not found');
-    } else if (error.code === 403 || error.response?.status === 403) {
+    } else if (sheetError.code === 403 || sheetError.response?.status === 403) {
       throw new Error('Permission denied. Please check if the service account has access to the spreadsheet.');
-    } else if (error.code === 404 || error.response?.status === 404) {
+    } else if (sheetError.code === 404 || sheetError.response?.status === 404) {
       throw new Error(`Spreadsheet not found. Please check the spreadsheet ID: ${SPREADSHEET_ID}`);
     }
     
     // Google API 에러 처리
-    if (error.response?.data?.error) {
-      const apiError = error.response.data.error;
+    if (sheetError.response?.data?.error) {
+      const apiError = sheetError.response.data.error;
       throw new Error(`Google API Error: ${apiError.message || JSON.stringify(apiError)}`);
     }
     
-    throw error;
+    throw sheetError;
   }
 }
-
 

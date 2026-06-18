@@ -6,6 +6,11 @@ export interface SheetRow {
   content: string;
 }
 
+interface SheetsApiResponse {
+  values?: string[][];
+  message?: string;
+}
+
 export function useSheetData() {
   const [data, setData] = useState<SheetRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +20,7 @@ export function useSheetData() {
     async function fetchData() {
       try {
         const response = await fetch('/api/sheets');
-        const result = await response.json();
+        const result = await response.json() as SheetsApiResponse;
 
         if (!response.ok) {
           throw new Error(result.message || 'Failed to fetch data');
@@ -41,8 +46,8 @@ export function useSheetData() {
                                   : formattedData;
 
         setData(dataWithoutHeader);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch data');
       } finally {
         setLoading(false);
       }
@@ -53,5 +58,4 @@ export function useSheetData() {
 
   return { data, loading, error };
 }
-
 
